@@ -1,0 +1,5 @@
+# Variables de entorno (nunca commitear)
+.env
+
+# Datos de MySQL en local
+mysql/data/
