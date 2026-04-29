@@ -104,3 +104,36 @@ INSERT INTO paquetes (nombre, descripcion, precio, duracion_dias, incluye, desti
 
 INSERT INTO usuarios (email, password_hash, nombre, rol) VALUES
 ('admin@alexatours.mx', '$2b$10$placeholder_change_on_first_login', 'Administrador', 'admin');
+
+-- ------------------------------------------------------------
+-- CONFIGURACION (site settings key-value store)
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS configuracion (
+  clave      VARCHAR(100)  NOT NULL PRIMARY KEY,
+  valor      TEXT,
+  grupo      VARCHAR(50),
+  etiqueta   VARCHAR(150),
+  tipo       ENUM('text','textarea','url','tel','email','color','image') NOT NULL DEFAULT 'text',
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+INSERT INTO configuracion (clave, valor, grupo, etiqueta, tipo) VALUES
+-- Contacto
+('whatsapp_numero',   '529991234567',                         'contacto', 'Número WhatsApp (con código país)',     'tel'),
+('telefono_display',  '+52 (999) 123-4567',                   'contacto', 'Teléfono visible en el sitio',          'tel'),
+('email_contacto',    'info@alexatours.mx',                   'contacto', 'Email de contacto',                     'email'),
+('direccion',         'Mérida, Yucatán, México',              'contacto', 'Dirección de la oficina',               'text'),
+-- Redes sociales
+('instagram_url',     'https://instagram.com/alexatours',     'redes',    'URL Instagram',                         'url'),
+('facebook_url',      'https://facebook.com/alexatours',      'redes',    'URL Facebook',                          'url'),
+('tiktok_url',        'https://tiktok.com/@alexatours',       'redes',    'URL TikTok',                            'url'),
+-- Hero
+('hero_titulo',       'Descubre el Mundo con Alexa Tours',    'hero',     'Título principal del Hero',             'text'),
+('hero_subtitulo',    'Experiencias únicas, recuerdos para siempre. Viaja con los expertos.', 'hero', 'Subtítulo del Hero', 'textarea'),
+('hero_cta_texto',    'Ver Paquetes',                         'hero',     'Texto del botón CTA',                   'text'),
+('hero_imagen_url',   'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1600', 'hero', 'Imagen de fondo del Hero', 'image'),
+-- General
+('nombre_empresa',    'Alexa Tours',                          'general',  'Nombre de la empresa',                  'text'),
+('slogan',            'Tu agencia de viajes de confianza',    'general',  'Slogan',                                'text'),
+('cta_whatsapp_msg',  'Hola! Me interesa conocer más sobre sus paquetes de viaje.', 'general', 'Mensaje inicial WhatsApp CTA', 'textarea')
+ON DUPLICATE KEY UPDATE clave = clave;
